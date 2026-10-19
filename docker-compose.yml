@@ -1,0 +1,35 @@
+# Portfolio stack. Needs only this file and the values in .env.example (set them in Portainer or a .env file).
+#
+#   client       public site, port ${CLIENT_PORT}; point the Cloudflare tunnel's public hostname at it
+#   admin        owner site, port ${ADMIN_PORT}; keep it on the local network and out of the tunnel
+#   server       API; reachable only from the other containers, never published
+
+services:
+  server:
+    image: ghcr.io/${GHCR_OWNER:?Set GHCR_OWNER to the GitHub account that owns the images}/portfolio-server:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    environment:
+      PORTFOLIO_PASSWORD: ${PORTFOLIO_PASSWORD:?Set PORTFOLIO_PASSWORD to the owner's admin password}
+      JAVA_TOOL_OPTIONS: -Djava.awt.headless=true -Xmx${SERVER_HEAP:-512m}
+    mem_limit: ${SERVER_MEMORY:-768m}
+    volumes:
+      - portfolio-data:/data
+
+  client:
+    image: ghcr.io/${GHCR_OWNER}/portfolio-client:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "${CLIENT_PORT:-3000}:80"
+
+  admin:
+    image: ghcr.io/${GHCR_OWNER}/portfolio-admin:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "${ADMIN_BIND:-0.0.0.0}:${ADMIN_PORT:-8081}:80"
+
+volumes:
+  portfolio-data:

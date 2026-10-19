@@ -1,0 +1,12 @@
+.git
+.github
+.idea
+.kotlin
+.amper
+build
+**/build
+data
+*.iml
+.DS_Store
+.env
+openspec

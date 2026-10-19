@@ -51,7 +51,42 @@ The `kotlin` (macOS/Linux) and `kotlin.bat` (Windows) scripts are self-bootstrap
 - Client apps: `./kotlin run -m clientAndroidApp`, `./kotlin run -m clientIosApp`, `./kotlin run -m clientWebApp`
 - Admin apps: `./kotlin run -m adminDesktopApp` (set `PORTFOLIO_SERVER_URL` to use a server other than `http://localhost:8090`), `./kotlin run -m adminWebApp`
 
-The web dev server uses port 8080, so run only one of the two web apps at a time.
+The web dev server uses port 8080, so run only one of the two web apps at a time. It expects the server on `localhost:8090`; served from any other address the web apps use their own address as the server's.
+
+## Deployment
+
+The server and both web apps run as containers from `docker-compose.yml`. The web apps call the server at their own address, so the same images work on localhost, on the local network and behind a tunnel.
+
+```
+internet -> Cloudflare tunnel (separate stack) -> client (nginx) -> server   public site: /api and /images only, /admin is 404
+local network -> admin (nginx) -> server                                    owner site: the full API
+```
+
+The server publishes no port. Its database and uploaded images live in the `portfolio-data` volume.
+
+**Images.** Tag a release (`git tag v1.0.0 && git push --tags`) and the *Images* workflow publishes `ghcr.io/<owner>/portfolio-server`, `-client` and `-admin` for amd64 and arm64 (including the Raspberry Pi), as the tag and as `latest`. You can also run the workflow by hand.
+
+**Settings.** Set the variables from [`.env.example`](./.env.example) in a `.env` file next to the compose file, or in the Portainer stack's environment variables:
+
+| Variable | Meaning |
+|---|---|
+| `PORTFOLIO_PASSWORD` | Owner's admin password (required) |
+| `GHCR_OWNER` | GitHub account that owns the images, lower case (required) |
+| `CLIENT_PORT`, `ADMIN_PORT` | Host ports of the public and the owner site (3000 and 8081) |
+| `ADMIN_BIND` | Publish the admin only on this host address, e.g. the Pi's LAN address |
+| `IMAGE_TAG` | `latest`, or a release tag to pin a version |
+| `SERVER_HEAP`, `SERVER_MEMORY` | JVM heap and container memory limit (512m and 768m) |
+
+**Portainer.**
+1. Registries -> Add registry -> GitHub (or custom `ghcr.io`) with a token that has `read:packages`. Not needed once the images are public.
+2. Stacks -> Add stack, paste `docker-compose.yml`, and fill in the environment variables.
+3. The tunnel runs in its own stack. In Cloudflare, point the public hostname at the client's published port, `http://<host address>:<CLIENT_PORT>` (the Pi's LAN address; `localhost` would mean the tunnel's own container). Do not add the admin to the tunnel; open it from the local network at `http://<host>:<ADMIN_PORT>`.
+
+**Local run.** `docker compose up` with a `.env` (set `PORTFOLIO_PASSWORD`, `GHCR_OWNER` and an `IMAGE_TAG` you have built). To build the images yourself: `docker build --target server -t ghcr.io/<owner>/portfolio-server:dev .`, and the same for `client` and `admin`.
+
+**Updating.** Change `IMAGE_TAG` (or pull `latest`) and redeploy the stack; the data volume is untouched. Roll back by setting the previous tag.
+
+**Backup.** `docker run --rm -v <stack>_portfolio-data:/data -v "$PWD":/backup alpine tar czf /backup/portfolio-data.tgz -C /data .` (the volume name is the stack name followed by `_portfolio-data`; `docker volume ls` shows it).
 
 ## App behavior
 

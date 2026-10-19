@@ -1,0 +1,78 @@
+name: Images
+
+# Publishes the server, client and admin images to GitHub Container Registry for amd64 and arm64
+# (the Raspberry Pi). Tag a release (v1.0.0) to publish it as that tag and as latest.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Registry paths must be lower case.
+      - name: Name the images
+        id: names
+        run: |
+          owner="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
+          echo "prefix=ghcr.io/${owner}/portfolio" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "version=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=dev" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The three builds share one cache scope, so the (slow) build stage runs once and the other two reuse it.
+      # That stage runs natively on the runner; only the small final stages are built for arm64.
+      - name: Server
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: server
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ steps.names.outputs.prefix }}-server:${{ steps.names.outputs.version }}
+            ${{ steps.names.outputs.prefix }}-server:latest
+          cache-from: type=gha,scope=portfolio
+          cache-to: type=gha,scope=portfolio,mode=max
+
+      - name: Client
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: client
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ steps.names.outputs.prefix }}-client:${{ steps.names.outputs.version }}
+            ${{ steps.names.outputs.prefix }}-client:latest
+          cache-from: type=gha,scope=portfolio
+          cache-to: type=gha,scope=portfolio,mode=max
+
+      - name: Admin
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: admin
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ steps.names.outputs.prefix }}-admin:${{ steps.names.outputs.version }}
+            ${{ steps.names.outputs.prefix }}-admin:latest
+          cache-from: type=gha,scope=portfolio
+          cache-to: type=gha,scope=portfolio,mode=max
