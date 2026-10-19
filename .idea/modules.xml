@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Portfolio.iml" filepath="$PROJECT_DIR$/.idea/Portfolio.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Portfolio.clientIosApp.iml" filepath="$PROJECT_DIR$/.idea/Portfolio.clientIosApp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Portfolio.iosApp.iml" filepath="$PROJECT_DIR$/.idea/Portfolio.iosApp.iml" />
     </modules>
   </component>
 </project>
