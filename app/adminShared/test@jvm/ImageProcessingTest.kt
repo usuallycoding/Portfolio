@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.admin
 
+import com.usuallycoding.portfolio.admin.data.*
+import com.usuallycoding.portfolio.admin.presentation.*
+
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream

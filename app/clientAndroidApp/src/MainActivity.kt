@@ -12,7 +12,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.usuallycoding.portfolio.client.ClientApp
-import com.usuallycoding.portfolio.client.ClientPlatform
+import com.usuallycoding.portfolio.client.presentation.ClientPlatform
 
 /**
  * The dev machine's LAN address, for a physical device. The emulator reaches the host at 10.0.2.2 instead.

@@ -1,5 +1,7 @@
 package com.usuallycoding.portfolio.client
 
+import com.usuallycoding.portfolio.client.presentation.*
+
 import androidx.compose.ui.unit.dp
 import kotlin.test.Test
 import kotlin.test.assertEquals

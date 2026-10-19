@@ -4,6 +4,7 @@ product:
 
 dependencies:
   - //core
+  - //app/sharedData
   - //app/sharedUi
   - $compose.runtime
   - $compose.foundation
@@ -14,6 +15,9 @@ dependencies:
   - $libs.androidx.lifecycle.viewmodel.compose
   - $libs.androidx.lifecycle.runtime.compose
   - $libs.ktor.client.core
+  - $libs.koin.core
+  - $libs.koin.compose
+  - $libs.koin.compose.viewmodel
   - $libs.filekit.dialogs.compose
 
 settings:

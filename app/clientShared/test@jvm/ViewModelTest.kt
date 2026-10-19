@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.client
 
+import com.usuallycoding.portfolio.client.presentation.*
+import com.usuallycoding.portfolio.client.domain.HomeData
+
 import com.usuallycoding.portfolio.PortfolioApi
 import com.usuallycoding.portfolio.ui.Load
 import io.ktor.client.HttpClient

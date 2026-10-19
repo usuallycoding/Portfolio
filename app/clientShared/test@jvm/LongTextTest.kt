@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.client
 
+import com.usuallycoding.portfolio.client.presentation.*
+import com.usuallycoding.portfolio.client.domain.HomeData
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width

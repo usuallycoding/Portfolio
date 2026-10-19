@@ -6,13 +6,27 @@ A personal portfolio: a Ktor server, admin apps for the owner to edit content, a
 
 | Module | Purpose | Targets |
 |---|---|---|
-| [`core`](./core) | DTOs, API paths and the `PortfolioApi` client shared by everything | jvm, android, ios, wasmJs |
+| [`core`](./core) | DTOs and API paths: the contract shared by the server and the apps | jvm, android, ios, wasmJs |
+| [`app/sharedData`](./app/sharedData) | `PortfolioApi`, the HTTP client and its per-platform engines | jvm, android, ios, wasmJs |
 | [`server`](./server) | Ktor server: public API, admin API, images, SQLite | jvm |
 | [`app/sharedUi`](./app/sharedUi) | Theme and Compose pieces shared by admin and client | jvm, android, ios, wasmJs |
 | [`app/clientShared`](./app/clientShared) | Client screens (read-only) | android, ios, wasmJs |
 | [`app/adminShared`](./app/adminShared) | Admin screens (editing) | jvm, wasmJs |
 | [`app/clientAndroidApp`](./app/clientAndroidApp), [`app/clientIosApp`](./app/clientIosApp), [`app/clientWebApp`](./app/clientWebApp) | Client shells | |
 | [`app/adminDesktopApp`](./app/adminDesktopApp), [`app/adminWebApp`](./app/adminWebApp) | Admin shells | |
+
+## Architecture
+
+`clientShared` and `adminShared` are organized in layers, as packages:
+
+```
+presentation  screens and view models; depends only on domain
+domain        repository interfaces (the DTOs from `core` double as the domain models)
+data          repository implementations over `PortfolioApi` (`sharedData`)
+di            Koin modules
+```
+
+Dependencies point inward, and nothing in `presentation` or `domain` imports Ktor or `PortfolioApi`. Dependency injection is [Koin](https://insert-koin.io/). `ClientApp` and `AdminApp` are the composition roots: the shells pass in what differs per device (server URL, theme store, platform kind) and the root creates an isolated Koin for that composition and closes it when it leaves. Do not use Koin's compose `KoinApplication` here: it shares one global instance across compositions. Tests swap definitions through the `overrides` argument of `AdminApp` or by building a Koin from `clientModules(...)` / `adminModules(...)`. Keep module definitions in functions, not top-level values, because a Koin `Module` owns its singleton instances.
 
 The `kotlin` (macOS/Linux) and `kotlin.bat` (Windows) scripts are self-bootstrapping wrappers for the Kotlin Toolchain. Build everything with `./kotlin build`, and run tests with `./kotlin test`.
 

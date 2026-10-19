@@ -23,6 +23,7 @@ settings:
 
 test-dependencies:
   - //app/adminShared
+  - //app/sharedData
   - $compose.desktop.currentOs
   - $kotlin.test
   - $libs.ktor.server.test.host

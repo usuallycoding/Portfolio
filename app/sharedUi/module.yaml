@@ -4,6 +4,7 @@ product:
 
 dependencies:
   - //core
+  - //app/sharedData
   - $compose.runtime
   - $compose.foundation
   - $compose.material3

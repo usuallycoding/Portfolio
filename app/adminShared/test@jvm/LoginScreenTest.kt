@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.admin
 
+import com.usuallycoding.portfolio.admin.data.*
+import com.usuallycoding.portfolio.admin.presentation.*
+
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage

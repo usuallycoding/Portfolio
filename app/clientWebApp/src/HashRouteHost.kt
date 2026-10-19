@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.client
 
+import com.usuallycoding.portfolio.client.presentation.Route
+import com.usuallycoding.portfolio.client.presentation.RouteHost
+import com.usuallycoding.portfolio.client.presentation.Routes
 import kotlinx.browser.window
 import org.w3c.dom.events.Event
 

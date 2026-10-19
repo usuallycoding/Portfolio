@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.admin
 
+import com.usuallycoding.portfolio.admin.data.*
+import com.usuallycoding.portfolio.admin.presentation.*
+
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

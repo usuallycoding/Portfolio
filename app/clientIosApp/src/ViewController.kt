@@ -2,7 +2,7 @@ package com.usuallycoding.portfolio
 
 import androidx.compose.ui.window.ComposeUIViewController
 import com.usuallycoding.portfolio.client.ClientApp
-import com.usuallycoding.portfolio.client.ClientPlatform
+import com.usuallycoding.portfolio.client.presentation.ClientPlatform
 
 /** The iOS simulator shares the host's network. Change this for a deployed server. */
 private const val SERVER_URL = "http://localhost:8090"

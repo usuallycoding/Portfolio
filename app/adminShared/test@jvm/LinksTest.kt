@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.admin
 
+import com.usuallycoding.portfolio.admin.data.*
+import com.usuallycoding.portfolio.admin.presentation.*
+
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -124,7 +127,7 @@ class LinksTest {
     fun screenListsLinksWithVisibilityAndControls() = runDesktopComposeUiTest(1000, 700) {
         val (_, session) = seeded()
         val vm = LinksViewModel(session)
-        setContent { PortfolioTheme { CompositionLocalProvider(LocalAdminSession provides session) { LinksScreen(vm) } } }
+        setContent { PortfolioTheme { TestContent(session) { LinksScreen(vm) } } }
         awaitText("GitHub")
         onNodeWithText("Email").assertIsDisplayed()
         onNodeWithText("Private").assertIsDisplayed()
@@ -138,7 +141,7 @@ class LinksTest {
     fun addingALinkThroughTheDialog() = runDesktopComposeUiTest(1000, 800) {
         val (server, session) = seeded()
         val vm = LinksViewModel(session)
-        setContent { PortfolioTheme { CompositionLocalProvider(LocalAdminSession provides session) { LinksScreen(vm) } } }
+        setContent { PortfolioTheme { TestContent(session) { LinksScreen(vm) } } }
         awaitText("GitHub")
 
         onNodeWithText("Add link").performClick()
@@ -157,7 +160,7 @@ class LinksTest {
     fun deleteAsksForConfirmationFirst() = runDesktopComposeUiTest(1000, 700) {
         val (server, session) = seeded()
         val vm = LinksViewModel(session)
-        setContent { PortfolioTheme { CompositionLocalProvider(LocalAdminSession provides session) { LinksScreen(vm) } } }
+        setContent { PortfolioTheme { TestContent(session) { LinksScreen(vm) } } }
         awaitText("GitHub")
 
         onAllNodesWithText("Delete")[0].performClick()

@@ -1,5 +1,7 @@
 package com.usuallycoding.portfolio.client
 
+import com.usuallycoding.portfolio.client.presentation.*
+
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

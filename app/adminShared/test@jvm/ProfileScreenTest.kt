@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.admin
 
+import com.usuallycoding.portfolio.admin.data.*
+import com.usuallycoding.portfolio.admin.presentation.*
+
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -41,7 +44,7 @@ class ProfileScreenTest {
         val session = server.session().also { runBlocking { it.login("secret") } }
         val vm = ProfileViewModel(session)
         setContent {
-            PortfolioTheme { CompositionLocalProvider(LocalAdminSession provides session) { ProfileScreen(vm) } }
+            PortfolioTheme { TestContent(session) { ProfileScreen(vm) } }
         }
         waitUntilExactlyOneExists(hasText("Profile picture"), 5_000)
         onNodeWithText("Cover image").assertIsDisplayed()
@@ -68,7 +71,7 @@ class ProfileScreenTest {
         server.rejectToken = true
         val vm = ProfileViewModel(session)
         setContent {
-            PortfolioTheme { CompositionLocalProvider(LocalAdminSession provides session) { ProfileScreen(vm) } }
+            PortfolioTheme { TestContent(session) { ProfileScreen(vm) } }
         }
         waitUntilExactlyOneExists(hasText("Retry"), 5_000)
         server.rejectToken = false

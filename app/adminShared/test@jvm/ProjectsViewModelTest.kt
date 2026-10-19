@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.admin
 
+import com.usuallycoding.portfolio.admin.data.*
+import com.usuallycoding.portfolio.admin.presentation.*
+
 import com.usuallycoding.portfolio.ProjectDto
 import com.usuallycoding.portfolio.ProjectSummaryDto
 import com.usuallycoding.portfolio.ui.Load

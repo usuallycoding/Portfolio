@@ -1,5 +1,8 @@
 package com.usuallycoding.portfolio.admin
 
+import com.usuallycoding.portfolio.admin.data.*
+import com.usuallycoding.portfolio.admin.presentation.*
+
 import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -49,7 +52,7 @@ class ProjectsScreenTest {
     fun listShowsEveryProjectWithItsVisibility() = runDesktopComposeUiTest(1000, 600) {
         val session = login(seeded())
         setContent {
-            TestContent(session) { ProjectsScreen(session, ProjectsViewModel(session)) }
+            TestContent(session) { ProjectsScreen(ProjectsViewModel(session)) }
         }
         awaitText("Analytical Engine")
         onNodeWithText("Private draft").assertIsDisplayed()
@@ -64,7 +67,7 @@ class ProjectsScreenTest {
         val session = login(server)
         val vm = ProjectsViewModel(session)
         setContent {
-            TestContent(session) { ProjectsScreen(session, vm) }
+            TestContent(session) { ProjectsScreen(vm) }
         }
         awaitText("New project")
         onNodeWithText("New project").performClick()

@@ -3,9 +3,9 @@ package com.usuallycoding.portfolio.server
 import com.usuallycoding.portfolio.ProfileInput
 import com.usuallycoding.portfolio.ProjectInput
 import com.usuallycoding.portfolio.SocialLinkInput
-import com.usuallycoding.portfolio.admin.CropAspect
-import com.usuallycoding.portfolio.admin.CropState
-import com.usuallycoding.portfolio.admin.ImageProcessing
+import com.usuallycoding.portfolio.admin.presentation.CropAspect
+import com.usuallycoding.portfolio.admin.presentation.CropState
+import com.usuallycoding.portfolio.admin.presentation.ImageProcessing
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream

@@ -1,7 +1,11 @@
 package com.usuallycoding.portfolio.admin
 
+import com.usuallycoding.portfolio.admin.data.*
+import com.usuallycoding.portfolio.admin.presentation.*
+
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import com.usuallycoding.portfolio.admin.domain.AdminRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
@@ -54,17 +58,33 @@ fun androidx.compose.ui.test.ComposeUiTest.awaitText(text: String, timeoutMs: Lo
 }
 
 /**
- * Wraps UI under test with the theme and session. Inspection mode stops Coil from loading images on its own
- * threads, which would otherwise race with recomposition in tests.
+ * Wraps UI under test with the theme and a Koin that serves [session]. Inspection mode stops Coil from loading
+ * images on its own threads, which would otherwise race with recomposition in tests.
  */
 @androidx.compose.runtime.Composable
 fun TestContent(session: AdminSession, content: @androidx.compose.runtime.Composable () -> Unit) {
-    com.usuallycoding.portfolio.ui.PortfolioTheme {
-        androidx.compose.runtime.CompositionLocalProvider(
-            LocalAdminSession provides session,
-            androidx.compose.ui.platform.LocalInspectionMode provides true,
-        ) { content() }
+    val koin = androidx.compose.runtime.remember(session) {
+        org.koin.dsl.koinApplication {
+            modules(org.koin.dsl.module { single<AdminRepository> { AdminRepositoryImpl(session) } })
+        }
     }
+    org.koin.compose.KoinIsolatedContext(koin) {
+        com.usuallycoding.portfolio.ui.PortfolioTheme {
+            androidx.compose.runtime.CompositionLocalProvider(
+                androidx.compose.ui.platform.LocalInspectionMode provides true,
+            ) { content() }
+        }
+    }
+}
+
+/** The whole app over [session], as the shells would build it but with the test's own server. */
+@androidx.compose.runtime.Composable
+fun AdminApp(
+    session: AdminSession,
+    themeStore: com.usuallycoding.portfolio.ui.ThemeStore = androidx.compose.runtime.remember { com.usuallycoding.portfolio.ui.SettingsThemeStore() },
+) {
+    val overrides = androidx.compose.runtime.remember(session) { listOf(org.koin.dsl.module { single { session } }) }
+    AdminApp("http://server", themeStore, overrides)
 }
 
 /** Like [awaitText], for a node found by its content description (icon buttons). */

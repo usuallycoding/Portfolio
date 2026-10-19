@@ -1,11 +1,12 @@
 modules:
+  - app/adminDesktopApp
   - app/adminShared
   - app/adminWebApp
   - app/clientAndroidApp
+  - app/clientIosApp
   - app/clientShared
   - app/clientWebApp
-  - app/adminDesktopApp
-  - app/clientIosApp
+  - app/sharedData
   - app/sharedUi
   - core
   - server
