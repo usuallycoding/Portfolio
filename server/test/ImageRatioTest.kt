@@ -1,5 +1,9 @@
 package com.usuallycoding.portfolio.server
 
+import com.usuallycoding.portfolio.server.data.*
+import com.usuallycoding.portfolio.server.service.*
+
+import com.usuallycoding.portfolio.server.domain.*
 import io.ktor.http.HttpStatusCode
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,8 +15,8 @@ import kotlin.test.assertTrue
 class ImageRatioTest {
     private suspend fun TestEnv.attach(width: Int, height: Int, ratio: AspectRatio?) =
         api.uploadImage(TestImages.jpeg(width, height), "a.jpg", "image/jpeg").let { image ->
-            context.database.transaction { conn ->
-                Images.requireForAttach(conn, image.id, ratio, context.config.ratioTolerance, "field")
+            database.transaction { conn ->
+                SqliteImageRepository(conn).requireForAttach(image.id, ratio, config.ratioTolerance, "field")
             }
         }
 
@@ -41,8 +45,7 @@ class ImageRatioTest {
             Triple(1000, 1000, AspectRatio.THUMBNAIL),
             Triple(300, 900, AspectRatio.SQUARE),
         )) {
-            val e = assertFailsWith<ApiError> { attach(w, h, ratio) }
-            assertEquals(HttpStatusCode.BadRequest, e.status)
+            val e = assertFailsWith<DomainError.Invalid> { attach(w, h, ratio) }
             assertTrue(ratio.label in e.message, e.message)
         }
     }
@@ -55,9 +58,9 @@ class ImageRatioTest {
 
     @Test
     fun nullIdClearsTheFieldAndUnknownIdIsRejected() = withServer {
-        context.database.transaction { conn ->
-            assertNull(Images.requireForAttach(conn, null, AspectRatio.SQUARE, 0.02, "field"))
-            assertFailsWith<ApiError> { Images.requireForAttach(conn, "does-not-exist", null, 0.02, "field") }
+        database.transaction { conn ->
+            assertNull(SqliteImageRepository(conn).requireForAttach(null, AspectRatio.SQUARE, 0.02, "field"))
+            assertFailsWith<DomainError.Invalid> { SqliteImageRepository(conn).requireForAttach("does-not-exist", null, 0.02, "field") }
         }
     }
 }

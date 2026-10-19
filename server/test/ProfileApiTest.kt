@@ -1,5 +1,7 @@
 package com.usuallycoding.portfolio.server
 
+import com.usuallycoding.portfolio.server.service.*
+
 import com.usuallycoding.portfolio.ProfileInput
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -28,6 +28,21 @@ di            Koin modules
 
 Dependencies point inward, and nothing in `presentation` or `domain` imports Ktor or `PortfolioApi`. Dependency injection is [Koin](https://insert-koin.io/). `ClientApp` and `AdminApp` are the composition roots: the shells pass in what differs per device (server URL, theme store, platform kind) and the root creates an isolated Koin for that composition and closes it when it leaves. Do not use Koin's compose `KoinApplication` here: it shares one global instance across compositions. Tests swap definitions through the `overrides` argument of `AdminApp` or by building a Koin from `clientModules(...)` / `adminModules(...)`. Keep module definitions in functions, not top-level values, because a Koin `Module` owns its singleton instances.
 
+### Server
+
+`server` follows the same layers, as packages under `server/src`:
+
+```
+api       Ktor routes, plugins, error mapping; depends on services only
+service   validation and business rules (profile, links, projects, images, auth, cleanup)
+domain    repository interfaces, ports (image files, image processing, password check), Transactor, domain errors
+data      SQLite repositories, file storage, AWT image processing, PBKDF2; the only place that sees java.sql
+di        Koin modules
+config    ServerConfig
+```
+
+Services run each unit of work through `Transactor.transaction { ... }`, so several repositories change together or not at all. Failures are `DomainError`s with no HTTP in them; `api/Errors.kt` maps them to status codes. `serverApplication` is the composition root: it installs Koin with the `KoinIsolated` plugin (the plain `Koin` plugin starts one global instance, so a second server in the same process would reuse the first one's database), and the isolated instance is closed, with the database, when the application stops. Tests start a server with `withServer { ... }`, fetch what they need with `koin.get<...>()`, and can swap any definition with the `overrides` argument. As in the apps, build Koin modules in functions, not top-level values.
+
 The `kotlin` (macOS/Linux) and `kotlin.bat` (Windows) scripts are self-bootstrapping wrappers for the Kotlin Toolchain. Build everything with `./kotlin build`, and run tests with `./kotlin test`.
 
 ## Running

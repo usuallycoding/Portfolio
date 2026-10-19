@@ -1,4 +1,4 @@
-package com.usuallycoding.portfolio.server
+package com.usuallycoding.portfolio.server.domain
 
 import java.time.Instant
 

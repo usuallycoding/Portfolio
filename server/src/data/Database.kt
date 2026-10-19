@@ -1,4 +1,4 @@
-package com.usuallycoding.portfolio.server
+package com.usuallycoding.portfolio.server.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

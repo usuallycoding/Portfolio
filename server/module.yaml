@@ -10,6 +10,8 @@ dependencies:
   - $libs.ktor.server.cors
   - $libs.ktor.serialization.kotlinx.json
   - $libs.sqlite.jdbc
+  - $libs.koin.core
+  - $libs.koin.ktor
   - $libs.logback.classic
 
 settings:

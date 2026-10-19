@@ -1,5 +1,6 @@
 package com.usuallycoding.portfolio.server
 
+import com.usuallycoding.portfolio.server.config.*
 import io.ktor.client.request.header
 import io.ktor.client.request.options
 import io.ktor.http.HttpHeaders

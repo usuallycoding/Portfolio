@@ -1,5 +1,7 @@
 package com.usuallycoding.portfolio.server
 
+import com.usuallycoding.portfolio.server.data.*
+
 import com.usuallycoding.portfolio.ApiException
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
@@ -16,9 +18,9 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class ImageUploadTest {
-    private fun TestEnv.imageFiles() = context.config.imagesDir.listDirectoryEntries()
+    private fun TestEnv.imageFiles() = config.imagesDir.listDirectoryEntries()
 
-    private fun TestEnv.imageRows(): Int = context.database.transactionBlocking { conn ->
+    private fun TestEnv.imageRows(): Int = database.transactionBlocking { conn ->
         conn.createStatement().use { st -> st.executeQuery("SELECT COUNT(*) FROM images").use { it.next(); it.getInt(1) } }
     }
 
@@ -42,7 +44,7 @@ class ImageUploadTest {
         loginOwner()
         val bytes = TestImages.png(300, 200)
         val image = api.uploadImage(bytes, "a.png", "image/png")
-        assertTrue(bytes.contentEquals(Files.readAllBytes(context.images.fileFor(image.fileName, thumbnail = false))))
+        assertTrue(bytes.contentEquals(Files.readAllBytes(imageFile(image.fileName, thumbnail = false))))
     }
 
     @Test
@@ -127,7 +129,7 @@ class ImageUploadTest {
         withServer {
             api.login(TEST_PASSWORD)
             val image = api.uploadImage(TestImages.jpeg(50, 50), "a.jpg", "image/jpeg")
-            recorded = context.database.transactionBlocking { conn -> Images.find(conn, image.id)!!.uploadedAt }
+            recorded = database.transactionBlocking { conn -> SqliteImageRepository(conn).find(image.id)!!.uploadedAt }
             assertEquals(clock.instant.epochSecond, recorded)
         }
     }

@@ -1,5 +1,7 @@
 package com.usuallycoding.portfolio.server
 
+import com.usuallycoding.portfolio.server.data.*
+
 import java.nio.file.Files
 import java.sql.SQLException
 import kotlin.test.Test

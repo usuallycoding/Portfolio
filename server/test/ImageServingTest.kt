@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 class ImageServingTest {
     /** Makes [imageId] the profile picture, so anonymous visitors may see it. */
     private fun TestEnv.makePublic(imageId: String) {
-        context.database.transactionBlocking { conn ->
+        database.transactionBlocking { conn ->
             conn.createStatement().use {
                 it.execute("INSERT OR REPLACE INTO profile(id, name, description, profile_image_id) VALUES (1, 'n', 'd', '$imageId')")
             }
@@ -125,7 +125,7 @@ class ImageServingTest {
         val thumbPrivate = api.uploadImage(TestImages.jpeg(160, 90), "c.jpg", "image/jpeg")
         val galleryPublic = api.uploadImage(TestImages.jpeg(160, 90), "d.jpg", "image/jpeg")
         val galleryPrivate = api.uploadImage(TestImages.jpeg(160, 90), "e.jpg", "image/jpeg")
-        context.database.transactionBlocking { conn ->
+        database.transactionBlocking { conn ->
             conn.createStatement().use {
                 it.execute("INSERT INTO social_links(name,address,is_public,icon_image_id,position) VALUES ('a','x',0,'${iconPrivate.id}',0)")
                 it.execute("INSERT INTO social_links(name,address,is_public,icon_image_id,position) VALUES ('b','x',1,'${iconPublic.id}',1)")
@@ -148,7 +148,7 @@ class ImageServingTest {
     fun imageSharedByPrivateAndPublicContentIsServed() = withServer {
         api.login(TEST_PASSWORD)
         val image = api.uploadImage(TestImages.jpeg(160, 90), "s.jpg", "image/jpeg")
-        context.database.transactionBlocking { conn ->
+        database.transactionBlocking { conn ->
             conn.createStatement().use {
                 it.execute("INSERT INTO projects(title,created_at,is_public,summary,thumbnail_image_id,position) VALUES ('p','2026-01-01',0,'','${image.id}',0)")
                 it.execute("INSERT INTO projects(title,created_at,is_public,summary,thumbnail_image_id,position) VALUES ('q','2026-01-01',1,'','${image.id}',1)")

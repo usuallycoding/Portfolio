@@ -1,4 +1,4 @@
-package com.usuallycoding.portfolio.server
+package com.usuallycoding.portfolio.server.config
 
 import java.nio.file.Path
 import java.nio.file.Paths

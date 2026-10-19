@@ -1,5 +1,6 @@
 package com.usuallycoding.portfolio.server
 
+import com.usuallycoding.portfolio.server.config.*
 import com.usuallycoding.portfolio.ApiException
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
@@ -41,7 +42,7 @@ class AuthTest {
     @Test
     fun expiredTokenIs401() = withServer {
         val token = api.login(TEST_PASSWORD).token
-        clock.advance(context.config.tokenTtl.plusSeconds(1))
+        clock.advance(config.tokenTtl.plusSeconds(1))
         assertEquals(HttpStatusCode.Unauthorized, raw.get("/admin/session") { bearerAuth(token) }.status)
     }
 
@@ -53,7 +54,7 @@ class AuthTest {
     @Test
     fun tokenIsNotStoredInClearText() = withServer {
         val token = api.login(TEST_PASSWORD).token
-        val stored = context.database.transaction { conn ->
+        val stored = database.transaction { conn ->
             conn.createStatement().use { st ->
                 st.executeQuery("SELECT token_hash FROM auth_tokens").use { rs -> buildList { while (rs.next()) add(rs.getString(1)) } }
             }
