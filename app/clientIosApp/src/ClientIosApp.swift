@@ -26,7 +26,7 @@ struct ContentView: View {
 }
 
 @main
-struct iosApp: App {
+struct ClientIosApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

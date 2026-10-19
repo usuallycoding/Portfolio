@@ -11,16 +11,16 @@ A personal portfolio: a Ktor server, admin apps for the owner to edit content, a
 | [`app/sharedUi`](./app/sharedUi) | Theme and Compose pieces shared by admin and client | jvm, android, ios, wasmJs |
 | [`app/clientShared`](./app/clientShared) | Client screens (read-only) | android, ios, wasmJs |
 | [`app/adminShared`](./app/adminShared) | Admin screens (editing) | jvm, wasmJs |
-| [`app/androidApp`](./app/androidApp), [`app/iosApp`](./app/iosApp), [`app/clientWebApp`](./app/clientWebApp) | Client shells | |
-| [`app/desktopApp`](./app/desktopApp), [`app/adminWebApp`](./app/adminWebApp) | Admin shells | |
+| [`app/clientAndroidApp`](./app/clientAndroidApp), [`app/clientIosApp`](./app/clientIosApp), [`app/clientWebApp`](./app/clientWebApp) | Client shells | |
+| [`app/adminDesktopApp`](./app/adminDesktopApp), [`app/adminWebApp`](./app/adminWebApp) | Admin shells | |
 
 The `kotlin` (macOS/Linux) and `kotlin.bat` (Windows) scripts are self-bootstrapping wrappers for the Kotlin Toolchain. Build everything with `./kotlin build`, and run tests with `./kotlin test`.
 
 ## Running
 
 - Server: `PORTFOLIO_PASSWORD=<password> ./kotlin run -m server`
-- Client apps: `./kotlin run -m androidApp`, `./kotlin run -m iosApp`, `./kotlin run -m clientWebApp`
-- Admin apps: `./kotlin run -m desktopApp` (set `PORTFOLIO_SERVER_URL` to use a server other than `http://localhost:8090`), `./kotlin run -m adminWebApp`
+- Client apps: `./kotlin run -m clientAndroidApp`, `./kotlin run -m clientIosApp`, `./kotlin run -m clientWebApp`
+- Admin apps: `./kotlin run -m adminDesktopApp` (set `PORTFOLIO_SERVER_URL` to use a server other than `http://localhost:8090`), `./kotlin run -m adminWebApp`
 
 The web dev server uses port 8080, so run only one of the two web apps at a time.
 
