@@ -1,0 +1,13 @@
+product: android/app
+
+dependencies:
+  - //app/clientShared
+  - $libs.androidx.activity.compose
+  - $compose.preview
+  - $compose.uiTooling
+
+settings:
+  compose: enabled
+  android:
+    namespace: com.usuallycoding.portfolio
+    applicationId: com.usuallycoding.portfolio

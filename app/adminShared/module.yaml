@@ -1,0 +1,29 @@
+product:
+  type: kmp/lib
+  platforms: [ jvm, wasmJs ]
+
+dependencies:
+  - //core
+  - //app/sharedUi
+  - $compose.runtime
+  - $compose.foundation
+  - $compose.material3
+  - $compose.ui
+  - $compose.preview
+  - $compose.hotReload.runtimeApi
+  - $libs.androidx.lifecycle.viewmodel.compose
+  - $libs.androidx.lifecycle.runtime.compose
+  - $libs.ktor.client.core
+  - $libs.filekit.dialogs.compose
+
+settings:
+  compose: enabled
+
+test-dependencies:
+  - $kotlin.test
+  - $libs.ktor.client.mock
+  - $libs.ktor.client.content.negotiation
+  - $libs.ktor.serialization.kotlinx.json
+  - $libs.kotlinx.coroutines.test
+  - $compose.desktop.currentOs
+  - $libs.compose.ui.test

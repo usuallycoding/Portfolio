@@ -1,0 +1,49 @@
+*.iml
+.kotlin
+build/
+.DS_Store
+captures
+**/module.xcodeproj/*
+!**/module.xcodeproj/project.pbxproj
+!**/module.xcodeproj/xcshareddata/
+!**/module.xcodeproj/project.xcworkspace/
+**/xcshareddata/WorkspaceSettings.xcsettings
+xcuserdata
+/data/
+
+# Build output & logs
+.gradle/
+.amper/
+*.log
+hs_err_pid*
+replay_pid*
+
+# JS / Wasm tooling
+node_modules/
+
+# IDE (shared config stays tracked; machine-local state does not)
+.idea/caches/
+.idea/workspace.xml
+.idea/shelf/
+.idea/deploymentTargetSelector.xml
+.idea/runConfigurations/iosApp*.xml
+*.ipr
+*.iws
+.fleet/
+
+# Local config & secrets
+local.properties
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+google-services.json
+GoogleService-Info.plist
+.claude/settings.local.json
+
+# Runtime data (SQLite DB + uploaded images)
+*.db
+*.db-shm
+*.db-wal

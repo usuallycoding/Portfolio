@@ -1,0 +1,33 @@
+product:
+  type: kmp/lib
+  platforms: [ jvm, android, iosArm64, iosSimulatorArm64, wasmJs ]
+
+dependencies:
+  - //core
+  - $compose.runtime
+  - $compose.foundation
+  - $compose.material3
+  - $libs.compose.material.icons.extended
+  - $compose.ui
+  - $compose.components.resources
+  - $compose.preview
+  - $libs.androidx.lifecycle.viewmodel.compose
+  - $libs.androidx.lifecycle.runtime.compose
+  - $libs.ktor.client.core
+  - $libs.coil.compose
+  - $libs.coil.network.ktor
+  - $libs.multiplatform.settings.no.arg
+
+dependencies@android:
+  - $compose.uiTooling
+
+settings:
+  compose:
+    enabled: true
+
+test-dependencies:
+  - $kotlin.test
+  - $libs.multiplatform.settings.test
+  - $compose.desktop.currentOs
+  - $libs.compose.ui.test
+  - $libs.ktor.client.mock

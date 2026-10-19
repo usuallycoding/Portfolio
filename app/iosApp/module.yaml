@@ -1,0 +1,8 @@
+product: ios/app
+
+dependencies:
+  - //app/clientShared
+  - $compose.ui
+
+settings:
+  compose: enabled

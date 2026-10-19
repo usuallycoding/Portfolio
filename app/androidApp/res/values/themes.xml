@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shown before the app's own theme draws, so it matches the light Material background. -->
+    <style name="Theme.Portfolio" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#FFFEF7FF</item>
+    </style>
+</resources>

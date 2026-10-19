@@ -1,0 +1,13 @@
+product: jvm/app
+
+dependencies:
+  - //app/adminShared
+  - $compose.desktop.currentOs
+  - $compose.preview
+  - $libs.kotlinx.coroutines.swing
+  - $libs.logback.classic
+
+settings:
+  compose: enabled
+  jvm:
+    mainClass: com.usuallycoding.portfolio.admin.MainKt

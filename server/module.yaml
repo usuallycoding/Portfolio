@@ -1,0 +1,30 @@
+product: jvm/app
+
+dependencies:
+  - //core
+  - $ktor.server.core
+  - $ktor.server.netty
+  - $libs.ktor.server.content.negotiation
+  - $libs.ktor.server.auth
+  - $libs.ktor.server.status.pages
+  - $libs.ktor.server.cors
+  - $libs.ktor.serialization.kotlinx.json
+  - $libs.sqlite.jdbc
+  - $libs.logback.classic
+
+settings:
+  ktor: enabled
+  # Only so tests can use the Compose catalog's native Skia runtime (see test-dependencies).
+  compose: enabled
+  kotlin:
+    serialization: json
+  jvm:
+    mainClass: com.usuallycoding.portfolio.server.ApplicationKt
+
+test-dependencies:
+  - //app/adminShared
+  - $compose.desktop.currentOs
+  - $kotlin.test
+  - $libs.ktor.server.test.host
+  - $libs.ktor.client.content.negotiation
+  - $libs.kotlinx.coroutines.test

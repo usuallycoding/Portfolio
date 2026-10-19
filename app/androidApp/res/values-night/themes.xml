@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Same, for a device in dark mode, so there is no white flash on launch. -->
+    <style name="Theme.Portfolio" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#FF141218</item>
+    </style>
+</resources>

@@ -1,0 +1,11 @@
+modules:
+  - app/adminShared
+  - app/adminWebApp
+  - app/androidApp
+  - app/clientShared
+  - app/clientWebApp
+  - app/desktopApp
+  - app/iosApp
+  - app/sharedUi
+  - core
+  - server
