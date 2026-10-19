@@ -34,9 +34,11 @@ The apps already follow the same principles (see the archived `clean-architectur
 
 **4. `Transactor` keeps `Connection` inside `data`.** `domain` declares `interface Transactor { suspend fun <T> transaction(block: Repositories.() -> T): T }`, where `Repositories` bundles the repository interfaces. `data` implements it by running the block on the IO dispatcher under the single-connection lock and binding the repositories to that connection, so a unit of work such as "validate images then save a project" stays atomic. The block is non-suspending because it runs while holding the lock. Alternative: one transaction per repository call. Rejected: it would break atomicity across image checks and writes.
 
+**4b. Aggregates that never change together do not need the `Transactor`.** `AuthTokenRepository` owns its atomic calls (for example "delete expired, then insert" in one transaction), because tokens are never written together with content. Only the content and image units of work use `Transactor`.
+
 **5. Domain errors replace `ApiError`.** `Invalid(message)`, `NotFound(message)`, `PayloadTooLarge`, `UnsupportedImage`, `TooManyAttempts`, `Unauthorized`. `api/Errors.kt` maps them in `StatusPages` to exactly today's statuses (400, 404, 413, 415, 429, 401) and `ErrorDto` bodies. The `ApiError` helpers (`badRequest`, `notFound`) are replaced by domain throws.
 
-**6. Ports for I/O the services must not know about.** `ImageFiles` (write, read, delete, list stored files), `ImageProcessor` (decode and thumbnail, AWT in `data`), `PasswordHasher` (PBKDF2 in `data`). This lets service tests use fakes.
+**6. Ports for I/O the services must not know about.** `ImageFiles` (write, read, delete, list stored files), `ImageProcessor` (decode and thumbnail, AWT in `data`), `PasswordVerifier` (checks a candidate against the one configured owner password; PBKDF2 in `data`). This lets service tests use fakes.
 
 **7. Koin with the isolated Ktor plugin.** `install(KoinIsolated) { modules(serverModules(config, clock)) }`. The plain `Koin` plugin calls `startKoin` on the global context and stops an existing one, so it cannot give each test application its own instance. Modules are built by functions, never top-level values, because a Koin `Module` owns its singleton instances. `Database` is registered with `onClose { it.close() }`, replacing the manual close in tests. Constructor injection only; `inject()` is used only where routes are mounted.
 
